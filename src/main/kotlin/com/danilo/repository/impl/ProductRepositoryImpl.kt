@@ -26,24 +26,22 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
                     product.description
                 )
         )
-        log.info("product added on database")
+        log.info("product added")
         return product
     }
 
-    override fun deleteCql(id: UUID) {
+    override fun deleteCql(id: String) {
         cqlSession.execute(
             SimpleStatement
                 .newInstance(
                     "DELETE FROM product.Product WHERE id = ?",
-                    id
-
+                    UUID.fromString(id)
                 )
-
         )
-        log.info("product deleted on database")
+        log.info("product deleted")
     }
 
-    override fun updateCql(id: UUID, product: Product): Product {
+    override fun updateCql(product: Product): Product {
         cqlSession.execute(
             SimpleStatement
                 .newInstance(
@@ -52,10 +50,10 @@ class ProductRepositoryImpl(private val cqlSession: CqlSession) : ProductReposit
                     product.price,
                     product.type,
                     product.description,
-                    id
+                    product.id
                 )
         )
-        log.info("product updated on database")
+        log.info("product updated")
         return product
     }
 }
